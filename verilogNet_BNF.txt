@@ -89,9 +89,6 @@ Definition of Items in Formal Syntax Specifications:
 <net_declaration>
 	::= <NETTYPE> <range>? <list_of_variables> ;
 
-<list_of_variables> ;
-	||= <NETTYPE> <range>? <list_of_assignments> ;
-
 <NETTYPE> is one of the following keywords:
 	wire  tri  tri1  supply0  wand  triand  tri0  supply1  wor  trior  trireg
 
