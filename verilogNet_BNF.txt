@@ -1,0 +1,284 @@
+Definition of Items in Formal Syntax Specifications:
++-----------------------+------------------------------------------------------------+
+|      Item            |               Meaning                                     |
++-----------------------+------------------------------------------------------------+
+| White space           | may be used to separate lexical tokens                     |
++-----------------------+------------------------------------------------------------+
+| Angle brackets        | surround each description item and are not literal sym-    |
+|                       | bols. That is, they do not appear in the source descrip-   |
+|                       | tion. Any text outside angle brackets is literal.          |
++-----------------------+------------------------------------------------------------+
+| <name> in lower case  | is a syntax construct item                                 |
++-----------------------+------------------------------------------------------------+
+| <NAME> in upper case  | is a lexical token item. Its definition is a terminal node |
+|                       | in the description hierarchy -- that is, its definition    |
+|                       | does not contain any syntax construct items                |
++-----------------------+------------------------------------------------------------+
+| <name>?               | is an optional item                                        |
++-----------------------+------------------------------------------------------------+
+| <name>*               | is zero, one, or more items                                |
++-----------------------+------------------------------------------------------------+
+| <name>+               | is one or more items                                       |
++-----------------------+------------------------------------------------------------+
+| <name><,<name>>*      | is a comma-separated list of items with at least one       |
+|                       | item in the list                                           |
++-----------------------+------------------------------------------------------------+
+| <name>::=             | gives a syntax definition to an item                       |
++-----------------------+------------------------------------------------------------+
+| ||=                   | introduces an alternative syntax definition                |
++-----------------------+------------------------------------------------------------+
+
+1. Source Text
+
+
+<source_text>
+	::= <description>*
+
+<description>
+	::= <module>
+
+<module>
+	::= module <name_of_module> <list_of_ports>? ;
+		<module_item>*
+		endmodule
+<name_of_module>
+	::= <IDENTIFIER>
+
+<list_of_ports>
+	::= ( <port> <,<port>>* )
+
+<port>
+	::= <port_expression>?
+	||= . <name_of_port> ( <port_expression>? )
+
+<port_expression>
+	::= <port_reference>
+	||= { <port_reference> <,<port_reference>>* }
+
+<port_reference>
+	::= <name_of_variable>
+	||= <name_of_variable> [ <constant_expression> ]
+	||= <name_of_variable> [ <constant_expression> :<constant_expression> ]
+
+<name_of_port>
+	::= <IDENTIFIER>
+
+<name_of_variable>
+	::= <IDENTIFIER>
+
+<module_item>
+	::= <input_declaration>
+	||= <output_declaration>
+	||= <inout_declaration>
+	||= <net_declaration>
+	||= <gate_declaration>
+	||= <module_instantiation>
+	||= <continuous_assign>
+
+2. Declarations
+
+
+<input_declaration>
+	::= input <range>? <list_of_variables> ;
+
+<output_declaration>
+	::= output <range>? <list_of_variables> ;
+
+<inout_declaration>
+	::= inout <range>? <list_of_variables> ;
+
+<net_declaration>
+	::= <NETTYPE> <range>? <list_of_variables> ;
+
+<list_of_variables> ;
+	||= <NETTYPE> <range>? <list_of_assignments> ;
+
+<NETTYPE> is one of the following keywords:
+	wire  tri  tri1  supply0  wand  triand  tri0  supply1  wor  trior  trireg
+
+<continuous_assign>
+	::= assign <list_of_assignments> ;
+	||= <NETTYPE> <range>? <list_of_assignments> ;
+
+<list_of_variables>
+	::= <name_of_variable> <,<name_of_variable>>*
+
+<name_of_variable>
+	::= <IDENTIFIER>
+
+<range>
+	::= [ <constant_expression> : <constant_expression> ]
+
+<list_of_assignments>
+	::= <assignment> <,<assignment>>*
+
+
+3. Primitive Instances
+
+
+<gate_declaration>
+	::= <GATETYPE> <gate_instance> <,<gate_instance>>* ;
+
+<GATETYPE> is one of the following keywords:
+	and  nand  or  nor xor  xnor buf  bufif0 bufif1  not  notif0 notif1  pulldown pullup
+	nmos  rnmos pmos rpmos cmos rcmos   tran rtran  tranif0  rtranif0  tranif1 rtranif1
+
+<gate_instance>
+	::= <name_of_gate_instance>? ( <terminal> <,<terminal>>* )
+
+<name_of_gate_instance>
+	::= <IDENTIFIER><range>?
+
+<terminal>
+	::= <expression>
+	||= <IDENTIFIER>
+
+
+4. Module Instantiations
+
+
+<module_instantiation>
+	::= <name_of_module> <module_instance> <,<module_instance>>* ;
+
+<name_of_module>
+	::= <IDENTIFIER>
+
+<module_instance>
+	::= <name_of_instance> ( <list_of_module_connections>? )
+
+<name_of_instance>
+	::= <IDENTIFIER><range>?
+
+<list_of_module_connections>
+	::= <module_port_connection> <,<module_port_connection>>*
+	||= <named_port_connection> <,<named_port_connection>>*
+
+<module_port_connection>
+	::= <expression>
+	||= <NULL>
+
+<NULL>
+	::= nothing - this form covers the case of an empty item in a list - for example:
+	      (a, b, , d)
+
+<named_port_connection>
+	::= .< IDENTIFIER> ( <expression> )
+
+
+5. Behavioral Statements
+
+
+<assignment>
+	::= <lvalue> = <expression>
+
+
+6. Specify Section
+
+
+7. Expressions
+
+
+<lvalue>
+	::= <identifier>
+	||= <identifier> [ <expression> ]
+	||= <identifier> [ <constant_expression> : <constant_expression> ]
+	||= <concatenation>
+
+<constant_expression>
+	::=<expression>
+
+<mintypmax_expression>
+	::= <expression>
+	||= <expression> : <expression> : <expression>
+
+<expression>
+	::= <primary>
+	||= <STRING>
+
+
+<STRING> is text enclosed in "" and contained on one line.
+
+<primary>
+	::= <number>
+	||= <identifier>
+	||= <identifier> [ <expression> ]
+	||= <identifier> [ <constant_expression> : <constant_expression> ]
+	||= <concatenation>
+	||= <multiple_concatenation>
+	||= <function_call>
+	||= ( <mintypmax_expression> )
+
+<number>
+	::= <DECIMAL_NUMBER>
+	||= <UNSIGNED_NUMBER>? <BASE> <UNSIGNED_NUMBER>
+	||= <DECIMAL_NUMBER>.<UNSIGNED_NUMBER>
+	||= <DECIMAL_NUMBER><.<UNSIGNED_NUMBER>>?
+		E<DECIMAL_NUMBER>
+	||= <DECIMAL_NUMBER><.<UNSIGNED_NUMBER>>?
+		e<DECIMAL_NUMBER>
+	(Note: embedded spaces are illegal in Verilog numbers, but embedded underscore
+	characters can be used for spacing in any type of number.)
+
+<DECIMAL_NUMBER>
+	::= A number containing a set of any of the following characters, optionally preceded by + or -
+	 	0123456789_
+
+<UNSIGNED_NUMBER>
+	::= A number containing a set of any of the following characters:
+	        0123456789_
+
+<NUMBER>
+	Numbers can be specified in decimal, hexadecimal, octal or binary, and may
+	optionally start with a + or -.  The <BASE> token controls what number digits
+	are legal.  <BASE> must be one of d, h, o, or b, for the bases decimal,
+	hexadecimal, octal, and binary respectively. A number can contain any set of
+	the following characters that is consistent with <BASE>:
+	0123456789abcdefABCDEFxXzZ?
+
+<BASE> is one of the following tokens:
+	'b   'B   'o   'O   'd   'D   'h   'H
+
+<concatenation>
+	::= { <expression> <,<expression>>* }
+
+<multiple_concatenation>
+	::= { <expression> { <expression> <,<expression>>* } }
+
+<function_call>
+	::= <name_of_function> ( <expression> <,<expression>>* )
+
+<name_of_function>
+	::= <identifier>
+
+
+8. General
+
+
+<comment>
+	::= <short_comment>
+	||= <long_comment>
+
+<short_comment>
+	::= // <comment_text> <END-OF-LINE>
+
+<long_comment>
+	::= /* <comment_text> */
+
+<comment_text>
+	::= The comment text is zero or more ASCII characters
+
+<identifier>
+	::= <IDENTIFIER><.<IDENTIFIER>>*
+	(Note: the period may not be preceded or followed by a space.)
+
+<IDENTIFIER>
+	An identifier is any sequence of letters, digits, dollar signs ($), and
+	underscore (_) symbol, except that the first must be a letter or the
+	underscore; the first character may not be a digit or $. Upper and lower case
+	letters are considered to be different. Identifiers may be up to 1024
+	characters long. Some Verilog-based tools do not recognize  identifier
+	characters beyond the 1024th as a significant part of the identifier. Escaped
+	identifiers start with the backslash character (\) and may include any
+	printable ASCII character. An escaped identifier ends with white space. The
+	leading backslash character is not considered to be part of the identifier.
+
