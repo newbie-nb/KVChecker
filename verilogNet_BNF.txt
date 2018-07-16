@@ -71,7 +71,6 @@ Definition of Items in Formal Syntax Specifications:
 	||= <output_declaration>
 	||= <inout_declaration>
 	||= <net_declaration>
-	||= <gate_declaration>
 	||= <module_instantiation>
 	||= <continuous_assign>
 
@@ -114,24 +113,6 @@ Definition of Items in Formal Syntax Specifications:
 
 
 3. Primitive Instances
-
-
-<gate_declaration>
-	::= <GATETYPE> <gate_instance> <,<gate_instance>>* ;
-
-<GATETYPE> is one of the following keywords:
-	and  nand  or  nor xor  xnor buf  bufif0 bufif1  not  notif0 notif1  pulldown pullup
-	nmos  rnmos pmos rpmos cmos rcmos   tran rtran  tranif0  rtranif0  tranif1 rtranif1
-
-<gate_instance>
-	::= <name_of_gate_instance>? ( <terminal> <,<terminal>>* )
-
-<name_of_gate_instance>
-	::= <IDENTIFIER><range>?
-
-<terminal>
-	::= <expression>
-	||= <IDENTIFIER>
 
 
 4. Module Instantiations
