@@ -1,6 +1,6 @@
 Definition of Items in Formal Syntax Specifications:
 +-----------------------+------------------------------------------------------------+
-|      Item            |               Meaning                                     |
+|       Item            |               Meaning                                      |
 +-----------------------+------------------------------------------------------------+
 | White space           | may be used to separate lexical tokens                     |
 +-----------------------+------------------------------------------------------------+
@@ -36,32 +36,28 @@ Definition of Items in Formal Syntax Specifications:
 
 <module>
 	::= module <name_of_module> <list_of_ports>? ;
-		<module_item>*
-		endmodule
+	    <module_item>*
+            endmodule
+
 <name_of_module>
 	::= <IDENTIFIER>
 
 <list_of_ports>
 	::= ( <port> <,<port>>* )
+        ||= ( )
 
 <port>
 	::= <port_expression>?
-	||= . <name_of_port> ( <port_expression>? )
+	||= . <IDENTIFIER> ( <port_expression>? )
 
 <port_expression>
 	::= <port_reference>
 	||= { <port_reference> <,<port_reference>>* }
 
 <port_reference>
-	::= <name_of_variable>
-	||= <name_of_variable> [ <constant_expression> ]
-	||= <name_of_variable> [ <constant_expression> :<constant_expression> ]
-
-<name_of_port>
 	::= <IDENTIFIER>
-
-<name_of_variable>
-	::= <IDENTIFIER>
+	||= <IDENTIFIER> [ <constant_expression> ]
+	||= <IDENTIFIER> [ <constant_expression> :<constant_expression> ]
 
 <module_item>
 	::= <input_declaration>
@@ -72,7 +68,6 @@ Definition of Items in Formal Syntax Specifications:
 	||= <continuous_assign>
 
 2. Declarations
-
 
 <input_declaration>
 	::= input <range>? <list_of_variables> ;
@@ -87,17 +82,24 @@ Definition of Items in Formal Syntax Specifications:
 	::= <NETTYPE> <range>? <list_of_variables> ;
 
 <NETTYPE> is one of the following keywords:
-	wire  tri  tri1  supply0  wand  triand  tri0  supply1  wor  trior  trireg
+	::=wire  
+        ||=tri  
+        ||=tri1  
+        ||=supply0  
+        ||=wand  
+        ||=triand  
+        ||=tri0  
+        ||=supply1  
+        ||=wor  
+        ||=trior  
+        ||=trireg
 
 <continuous_assign>
 	::= assign <list_of_assignments> ;
 	||= <NETTYPE> <range>? <list_of_assignments> ;
 
 <list_of_variables>
-	::= <name_of_variable> <,<name_of_variable>>*
-
-<name_of_variable>
-	::= <IDENTIFIER>
+	::= <IDENTIFIER> <,<IDENTIFIER>>*
 
 <range>
 	::= [ <constant_expression> : <constant_expression> ]
@@ -142,16 +144,13 @@ Definition of Items in Formal Syntax Specifications:
 
 5. Behavioral Statements
 
-
 <assignment>
 	::= <lvalue> = <expression>
-
 
 6. Specify Section
 
 
 7. Expressions
-
 
 <lvalue>
 	::= <identifier>
@@ -168,10 +167,7 @@ Definition of Items in Formal Syntax Specifications:
 
 <expression>
 	::= <primary>
-	||= <STRING>
 
-
-<STRING> is text enclosed in "" and contained on one line.
 
 <primary>
 	::= <number>
