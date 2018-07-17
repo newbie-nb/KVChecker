@@ -32,10 +32,7 @@ Definition of Items in Formal Syntax Specifications:
 
 
 <source_text>
-	::= <description>*
-
-<description>
-	::= <module>
+	::= <module>*
 
 <module>
 	::= module <name_of_module> <list_of_ports>? ;
