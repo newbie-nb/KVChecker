@@ -35,12 +35,9 @@ Definition of Items in Formal Syntax Specifications:
 	::= <module>*
 
 <module>
-	::= module <name_of_module> <list_of_ports>? ;
+	::= module <IDENTIFIER> <list_of_ports>? ;
 	    <module_item>*
             endmodule
-
-<name_of_module>
-	::= <IDENTIFIER>
 
 <list_of_ports>
 	::= ( <port> <,<port>>* )
@@ -85,11 +82,9 @@ Definition of Items in Formal Syntax Specifications:
 	::=wire  
         ||=tri  
         ||=tri1  
-        ||=supply0  
         ||=wand  
         ||=triand  
         ||=tri0  
-        ||=supply1  
         ||=wor  
         ||=trior  
         ||=trireg
@@ -115,10 +110,7 @@ Definition of Items in Formal Syntax Specifications:
 
 
 <module_instantiation>
-	::= <name_of_module> <module_instance> <,<module_instance>>* ;
-
-<name_of_module>
-	::= <IDENTIFIER>
+	::= <IDENTIFIER> <module_instance> <,<module_instance>>* ;
 
 <module_instance>
 	::= <name_of_instance> ( <list_of_module_connections>? )
@@ -176,7 +168,6 @@ Definition of Items in Formal Syntax Specifications:
 	||= <identifier> [ <constant_expression> : <constant_expression> ]
 	||= <concatenation>
 	||= <multiple_concatenation>
-	||= <function_call>
 	||= ( <mintypmax_expression> )
 
 <number>
@@ -214,13 +205,6 @@ Definition of Items in Formal Syntax Specifications:
 
 <multiple_concatenation>
 	::= { <expression> { <expression> <,<expression>>* } }
-
-<function_call>
-	::= <name_of_function> ( <expression> <,<expression>>* )
-
-<name_of_function>
-	::= <identifier>
-
 
 8. General
 
